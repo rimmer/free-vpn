@@ -1,0 +1,11 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/app/manifest.json",
+                "/dist/*/manifest.json"
+            ],
+            "url": "http://json.schemastore.org/webextension"
+        }
+    ],
+}

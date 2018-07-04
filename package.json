@@ -1,0 +1,12 @@
+{
+  "name": "FreeVPN",
+  "version": "0.0.1",
+  "description": "Stay private with you favorite sites safely with maximum security. Ublock sites and services, blocked in your country, like VK, Youtube, Linkedin or adult.",
+  "scripts": {
+    "dev": "webextension-toolbox dev",
+    "build": "webextension-toolbox build"
+  },
+  "devDependencies": {
+    "webextension-toolbox": "latest"
+  }
+}
