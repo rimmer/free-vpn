@@ -12,5 +12,5 @@
 import ProxyFormController from '../proxy/proxy_form_controller.js'
 
 document.addEventListener('DOMContentLoaded', function () {
-    var c = new ProxyFormController( 'proxyForm' );
+    new ProxyFormController( 'proxyForm' );
 });

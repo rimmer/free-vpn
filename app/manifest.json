@@ -1,5 +1,4 @@
 {
-  "$schema": "http://json.schemastore.org/webextension",
   "name": "__MSG_appName__",
   "short_name": "__MSG_appShortName__",
   "description": "__MSG_appDescription__",

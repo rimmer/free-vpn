@@ -25,14 +25,10 @@ function ProxyErrorHandler() {
   chrome.extension.onRequest.addListener(this.handleOnRequest_.bind(this));
 };
 
-///////////////////////////////////////////////////////////////////////////////
-
 /**
  * @typedef {{fatal: boolean, error: string, details: string}}
  */
 ProxyErrorHandler.ErrorDetails;
-
-///////////////////////////////////////////////////////////////////////////////
 
 ProxyErrorHandler.prototype = {
   /**
@@ -68,15 +64,15 @@ ProxyErrorHandler.prototype = {
    * @private
    */
   handleError_: function(details) {
-    var RED = [255, 0, 0, 255];
-    var YELLOW = [255, 205, 0, 255];
+    let RED = [255, 0, 0, 255];
+    let YELLOW = [255, 205, 0, 255];
 
     // Badge the popup icon.
-    var color = details.fatal ? RED : YELLOW;
+    let color = details.fatal ? RED : YELLOW;
     chrome.browserAction.setBadgeBackgroundColor({color: color});
     chrome.browserAction.setBadgeText({text: 'X'});
     chrome.browserAction.setTitle({
-      title: chrome.i18n.getMessage('errorPopupTitle', details.error)
+      title: chrome.i18n.getMessage('errorPopupTitle', details.error),
     });
 
     // Store the error for display in the popup.
@@ -100,7 +96,7 @@ ProxyErrorHandler.prototype = {
   clearErrorDetails: function() {
     chrome.browserAction.setBadgeText({text: ''});
     this.lastError_ = null;
-  }
-}
+  },
+};
 
 export default ProxyErrorHandler;
