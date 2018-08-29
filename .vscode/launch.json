@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch firefox addon",
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "addonType": "webExtension",
+            "addonPath": "${workspaceFolder}/dist/firefox",
+            "reloadOnChange": {
+                "watch": [ "${workspaceFolder}/app/*.js" ],
+                "ignore": [ "${workspaceFolder}/node_modules/**" ]
+            },
+            "log": {
+                "consoleLevel": {
+                    "PathConversion": "Error",
+                    "default": "Error"
+                }
+            },
+            "pathMappings": [
+                { "url": "webpack:///~/", "path": "${webRoot}/node_modules/" },
+                { "url": "webpack:///./~/", "path": "${webRoot}/node_modules/" },
+                { "url": "webpack:///", "path": "${workspaceFolder}/app" }
+            ]
+        }
+    ]
+}

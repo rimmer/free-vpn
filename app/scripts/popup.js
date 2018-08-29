@@ -9,8 +9,18 @@
  * @author Mike West <mkwst@google.com>
  */
 
-import ProxyFormController from '../proxy/proxy_form_controller.js'
+import {app} from 'hyperapp';
+import {
+    ProxyServerListState,
+    ProxyServerListActions,
+    ProxyServerListView,
+} from '../proxy/proxy_server_list_view';
 
-document.addEventListener('DOMContentLoaded', function () {
-    new ProxyFormController( 'proxyForm' );
-});
+const hyperapp = app(
+    ProxyServerListState,
+    ProxyServerListActions,
+    ProxyServerListView,
+    document.body
+);
+
+hyperapp.startUpdateLocations();
