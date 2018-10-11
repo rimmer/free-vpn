@@ -5,27 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch firefox addon",
-            "type": "firefox",
+            "type": "chrome",
             "request": "launch",
-            "reAttach": true,
-            "addonType": "webExtension",
-            "addonPath": "${workspaceFolder}/dist/firefox",
-            "reloadOnChange": {
-                "watch": [ "${workspaceFolder}/app/*.js" ],
-                "ignore": [ "${workspaceFolder}/node_modules/**" ]
-            },
-            "log": {
-                "consoleLevel": {
-                    "PathConversion": "Error",
-                    "default": "Error"
-                }
-            },
-            "pathMappings": [
-                { "url": "webpack:///~/", "path": "${webRoot}/node_modules/" },
-                { "url": "webpack:///./~/", "path": "${webRoot}/node_modules/" },
-                { "url": "webpack:///", "path": "${workspaceFolder}/app" }
-            ]
-        }
+            "name": "Launch Chrome",
+            "webRoot": "${workspaceFolder}",
+            "runtimeExecutable": "/snap/bin/chromium"
+        },
+        {
+            "type": "chrome",
+            "request": "attach",
+            "name": "Attach to Chrome",
+            "port": 9222,
+            "webRoot": "${workspaceFolder}"
+        },
     ]
 }

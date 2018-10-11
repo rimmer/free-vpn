@@ -21,10 +21,21 @@ document.addEventListener('DOMContentLoaded', function() {
   // incognito settings are wiped on restart.
 
   browser.runtime.onMessage.addListener((request) => {
-    if (request.selectedProxy) {
-      console.debug('setting proxy');
+    if (request.selectProxy) {
       const proxy = request.selectedProxy;
       setProxy(proxy);
     }
   });
+});
+
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+  for (key in changes) {
+    let storageChange = changes[key];
+    console.log('Storage key "%s" in namespace "%s" changed. ' +
+                'Old value was "%s", new value is "%s".',
+                key,
+                namespace,
+                storageChange.oldValue,
+                storageChange.newValue);
+  }
 });

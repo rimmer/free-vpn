@@ -18,14 +18,14 @@ export const ProxyServerListState = {
 };
 
 export const ProxyServerListActions = {
-    select: (selectedProxy) => (state) => {
-        state.selectedProxy = selectedProxy;
+    select: (selectedProxy) => () => {
         ProxyServerService.i().setSelected(selectedProxy);
     },
     startUpdateLocations: () => async (state, actions) => {
-        actions.updateLocations(await ProxyServerService.i().getLocations());
+        ProxyServerService.i().getLocations().then(actions.updateLocations);
     },
-    updateLocations: (locations) => ({proxies: locations}),
+    updateLocations: (locations) =>
+                    ({proxies: locations}),
 };
 
 /**
@@ -39,7 +39,11 @@ export const ProxyServerListActions = {
  */
 export const ProxyServerListView = (state, actions) => (
     <ul class="list proxies">
-        {state.proxies.map((server) => (
+        <li class="pseudo button"
+            onclick={()=>actions.select(null)}>
+            {browser.i18n.getMessage('directConnection')}
+        </li>
+        {state.proxies && state.proxies.map((server) => (
             <li class="pseudo button"
                 onclick={()=>actions.select(server)}>
                 <span class={
