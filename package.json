@@ -7,22 +7,22 @@
     "build": "webextension-toolbox build"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.6",
+    "babel-eslint": "^10.0.1",
     "babel-plugin-transform-react-jsx": "^6.24.1",
-    "css-loader": "^1.0.0",
-    "eslint": "^5.6.1",
+    "css-loader": "^1.0.1",
+    "eslint": "^5.15.1",
     "eslint-config-google": "^0.9.1",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jest": "^21.24.1",
-    "eslint-plugin-react": "^7.11.1",
-    "mini-css-extract-plugin": "^0.4.3",
-    "node-sass": "^4.9.3",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^21.27.2",
+    "eslint-plugin-react": "^7.12.4",
+    "mini-css-extract-plugin": "^0.4.5",
+    "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "webextension-toolbox": "^2.0.0",
-    "webpack": "^4.20.2"
+    "webextension-toolbox": "^3.0.0",
+    "webpack": "^4.29.6"
   },
   "dependencies": {
-    "flag-icon-css": "^3.2.0",
+    "flag-icon-css": "^3.3.0",
     "hyperapp": "^1.2.9",
     "picnic": "^6.5.0",
     "promise-polyfill": "8.0.0",
