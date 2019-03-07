@@ -33,10 +33,10 @@ export default class ProxyServerService {
      * @return {ProxyServerService} instance of service
      */
     static i() {
-        if (!this._instance) {
-            this._instance = new ProxyServerService();
-        }
-        return this._instance;
+      if (!this._instance) {
+        this._instance = new ProxyServerService();
+      }
+      return this._instance;
     }
 
     /**
@@ -56,31 +56,31 @@ export default class ProxyServerService {
      * proxy locattions plus pagination data
      */
     getLocations(page = 1,
-                        perPage = ProxyServerService._DEFAULT_PER_PAGE) {
-        return fetch(
-                this._getEndpointUrl()
+        perPage = ProxyServerService._DEFAULT_PER_PAGE) {
+      return fetch(
+          this._getEndpointUrl()
                 + '/api/v1/locations?pages='
                 + page + '&per_page='
                 + perPage)
-            .catch(() => {
-                console.error('Failed to fetch proxies. Falling back to cache');
-                // pretend the real data
-                return this._getCachedLocations();
-            })
-            .then((response) => response.json())
-            .catch(() => {
-                console.error('Failed parse proxy list. Falling back to cache');
-                // pretend the real data
-                return this._getCachedLocations();
-            })
-            .then((results) => {
-                let data = results.results;
-                if (!results.cache) {
-                    console.debug('Saving locations to cache');
-                    LocalStorage.locations(data);
-                }
-                return data;
-            });
+          .catch(() => {
+            console.error('Failed to fetch proxies. Falling back to cache');
+            // pretend the real data
+            return this._getCachedLocations();
+          })
+          .then((response) => response.json())
+          .catch(() => {
+            console.error('Failed parse proxy list. Falling back to cache');
+            // pretend the real data
+            return this._getCachedLocations();
+          })
+          .then((results) => {
+            let data = results.results;
+            if (!results.cache) {
+              console.debug('Saving locations to cache');
+              LocalStorage.locations(data);
+            }
+            return data;
+          });
     }
 
     /**
@@ -91,14 +91,14 @@ export default class ProxyServerService {
      * @memberof ProxyServerService
      */
     async _getCachedLocations() {
-        const data = await LocalStorage.locations();
-        return {
-            json: () => {
-                // also using 'cache' variable
-                // to indicate we are on cache
-                return {results: data ? data : [], cache: true};
-            },
-        };
+      const data = await LocalStorage.locations();
+      return {
+        json: () => {
+          // also using 'cache' variable
+          // to indicate we are on cache
+          return {results: data ? data : [], cache: true};
+        },
+      };
     }
 
     /**
@@ -109,12 +109,12 @@ export default class ProxyServerService {
      * @memberof ProxyServerService
      */
     setSelected(proxy) {
-        LocalStorage.selectedLocation(proxy);
-        // lest notify background that proxy had changed
-        browser.runtime.sendMessage(
-            {selectProxy: true, selectedProxy: proxy}
-        );
-        console.debug(proxy);
+      LocalStorage.selectedLocation(proxy);
+      // lest notify background that proxy had changed
+      browser.runtime.sendMessage(
+          {selectProxy: true, selectedProxy: proxy}
+      );
+      console.debug(proxy);
     }
 
     /**
@@ -122,7 +122,7 @@ export default class ProxyServerService {
      * @memberof ProxyServerService
      */
     async getSelected() {
-        return LocalStorage.selectedLocation();
+      return LocalStorage.selectedLocation();
     }
 
     /**
@@ -133,10 +133,10 @@ export default class ProxyServerService {
      * @memberof ProxyServerService
      */
     _getEndpointUrl() {
-        if (!this._endpointAddress) {
-            this._endpointAddress = 'http://185.177.4.227:8080';
-        }
+      if (!this._endpointAddress) {
+        this._endpointAddress = 'http://185.177.4.227:8080';
+      }
 
-        return this._endpointAddress;
+      return this._endpointAddress;
     }
 }

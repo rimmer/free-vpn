@@ -54,6 +54,7 @@ module.exports = {
                 },
             ]),
         );
+        config.devtool = 'inline-module-source-map';
         return config;
     },
 };

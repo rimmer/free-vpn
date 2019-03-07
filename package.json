@@ -9,13 +9,13 @@
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "babel-plugin-transform-react-jsx": "^6.24.1",
-    "css-loader": "^1.0.1",
+    "css-loader": "^2.1.1",
     "eslint": "^5.15.1",
-    "eslint-config-google": "^0.9.1",
+    "eslint-config-google": "^0.12.0",
     "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-jest": "^21.27.2",
+    "eslint-plugin-jest": "^22.3.0",
     "eslint-plugin-react": "^7.12.4",
-    "mini-css-extract-plugin": "^0.4.5",
+    "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
     "webextension-toolbox": "^3.0.0",
@@ -25,7 +25,7 @@
     "flag-icon-css": "^3.3.0",
     "hyperapp": "^1.2.9",
     "picnic": "^6.5.0",
-    "promise-polyfill": "8.0.0",
-    "whatwg-fetch": "^2.0.4"
+    "promise-polyfill": "8.1.0",
+    "whatwg-fetch": "^3.0.0"
   }
 }
