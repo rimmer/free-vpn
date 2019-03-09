@@ -3,8 +3,14 @@
   "version": "0.0.1",
   "description": "Stay private with you favorite sites safely with maximum security. Ublock sites and services, blocked in your country, like VK, Youtube, Linkedin or adult.",
   "scripts": {
-    "dev": "webextension-toolbox dev",
-    "build": "webextension-toolbox build"
+    "dev:chrome": "webextension-toolbox dev chrome",
+    "dev:opera": "webextension-toolbox dev opera",
+    "dev:firefox": "webextension-toolbox dev firefox",
+    "dev:edge": "webextension-toolbox dev edge",
+    "build:chrome": "webextension-toolbox build chrome",
+    "build:opera": "webextension-toolbox build opera",
+    "build:firefox": "webextension-toolbox build firefox",
+    "build:edge": "webextension-toolbox build"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
