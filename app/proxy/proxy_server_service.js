@@ -55,32 +55,32 @@ export default class ProxyServerService {
      * @return {Promise<ProxyItem[]>} promise that will contain
      * proxy locattions plus pagination data
      */
-    getLocations(page = 1,
+    async getLocations(page = 1,
         perPage = ProxyServerService._DEFAULT_PER_PAGE) {
-      return fetch(
-          this._getEndpointUrl()
-                + '/api/v1/locations?pages='
-                + page + '&per_page='
-                + perPage)
-          .catch(() => {
-            console.error('Failed to fetch proxies. Falling back to cache');
-            // pretend the real data
-            return this._getCachedLocations();
-          })
-          .then((response) => response.json())
-          .catch(() => {
-            console.error('Failed parse proxy list. Falling back to cache');
-            // pretend the real data
-            return this._getCachedLocations();
-          })
-          .then((results) => {
-            let data = results.results;
-            if (!results.cache) {
-              console.debug('Saving locations to cache');
-              LocalStorage.locations(data);
-            }
-            return data;
-          });
+      /** @type {Response} */
+      let response;
+      try {
+        response = await fetch(this._getEndpointUrl()
+          + '/api/v1/locations?pages='
+          + page + '&per_page='
+          + perPage);
+        if (!response.ok) throw new Error(response.statusText);
+      } catch (e) {
+        console.warn('Failed to fetch proxies. Falling back to cache');
+        response = this._getCachedLocations();
+      }
+      if (!response.cache && response.ok) {
+        const results = await response.json();
+        const data = results.results;
+        if (!results.cache) {
+          console.debug('Saving locations to cache');
+          LocalStorage.locations(data);
+        }
+        return data;
+      } else {
+        console.warn('Failed to parse proxies. Falling back to cache');
+        return response.results;
+      }
     }
 
     /**
@@ -90,15 +90,11 @@ export default class ProxyServerService {
      * @return {Promise<object>} list of cached proxies
      * @memberof ProxyServerService
      */
-    async _getCachedLocations() {
-      const data = await LocalStorage.locations();
-      return {
-        json: () => {
-          // also using 'cache' variable
-          // to indicate we are on cache
-          return {results: data ? data : [], cache: true};
-        },
-      };
+    _getCachedLocations() {
+      const data = LocalStorage.locations();
+      // also using 'cache' variable
+      // to indicate we are on cache
+      return {results: data ? data : [], cache: true};
     }
 
     /**
