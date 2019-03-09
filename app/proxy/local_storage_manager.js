@@ -8,12 +8,14 @@ export default class LocalStorage {
   /**
      * Gets/sets proxy locations
      * @param {ProxyItem[]} proxies proxy list to save
-     * @return {Promise<any>} Promise with operation result
+     * @return {boolean | Promise<ProxyItem[]>} true if setting proxies
+     * was successful
+     * or Promise with operation result
      */
   static async locations(proxies) {
     if (proxies) {
       const result = await browser.storage.local.set({proxies: proxies});
-      return result;
+      return (result === undefined); // means everything went good
     } else {
       const result = await browser.storage.local.get('proxies');
       return result.proxies;

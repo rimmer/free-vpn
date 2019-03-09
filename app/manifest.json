@@ -24,7 +24,7 @@
   },
 
   "permissions": [
-    "<all_urls>",
+    "http://185.177.4.227:8080/",
     "proxy",
     "storage"
   ]

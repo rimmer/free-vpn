@@ -8,25 +8,6 @@
  */
 
 import {h} from 'hyperapp';
-import ProxyServerService from './proxy_server_service.js';
-
-export const ProxyServerListState = {
-    // TODO this should be replaced with tests
-    /** @type {ProxyItem[]} */
-    proxies: [],
-    selectedProxy: ProxyServerService.i().getSelected(),
-};
-
-export const ProxyServerListActions = {
-    select: (selectedProxy) => () => {
-        ProxyServerService.i().setSelected(selectedProxy);
-    },
-    startUpdateLocations: () => async (state, actions) => {
-        ProxyServerService.i().getLocations().then(actions.updateLocations);
-    },
-    updateLocations: (locations) =>
-                    ({proxies: locations}),
-};
 
 /**
  * Hyperapp render function,
@@ -37,20 +18,20 @@ export const ProxyServerListActions = {
  * @param {ProxyServerListActions} actions
  * @return {Object} object with hyperapp virtual DOM
  */
-export const ProxyServerListView = (state, actions) => (
-    <ul class="list proxies">
-        <li class="pseudo button"
-            onclick={()=>actions.select(null)}>
-            {browser.i18n.getMessage('directConnection')}
-        </li>
-        {state.proxies && state.proxies.map((server) => (
-            <li class="pseudo button"
-                onclick={()=>actions.select(server)}>
-                <span class={
-                    'flag-icon flag-icon-'+server.country.toLowerCase()
-                }/>
-                {server.city}
-            </li>
-        ))}
-    </ul>
+export const ProxyServerListView = ({proxies, select}) => (
+  <ul class="list proxies">
+    <li class="pseudo button"
+      onclick={()=>select(null)}>
+      {browser.i18n.getMessage('directConnection')}
+    </li>
+    {proxies && proxies.map((server) => (
+      <li class="pseudo button"
+        onclick={()=>select(server)}>
+        <span class={
+          'flag-icon flag-icon-'+server.country.toLowerCase()
+        }/>
+        {server.city}
+      </li>
+    ))}
+  </ul>
 );

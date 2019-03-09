@@ -10,6 +10,7 @@
  */
 
 import {setProxy} from '../proxy/proxy_system_settings';
+import ProxyServerService from '../proxy/proxy_server_service.js';
 
 browser.runtime.onInstalled.addListener((details) => {
   console.log('previousVersion', details.previousVersion);
@@ -26,18 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
       setProxy(proxy);
     }
   });
-});
 
-chrome.storage.onChanged.addListener(function(changes, namespace) {
-  for (const key in changes) {
-    if (key) {
-      const storageChange = changes[key];
-      console.log('Storage key "%s" in namespace "%s" changed. ' +
-      'Old value was "%s", new value is "%s".',
-      key,
-      namespace,
-      storageChange.oldValue,
-      storageChange.newValue);
-    }
-  }
+  ProxyServerService.i().fetchLocations();
 });

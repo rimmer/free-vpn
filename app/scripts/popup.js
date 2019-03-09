@@ -8,19 +8,38 @@
  *
  * @author Mike West <mkwst@google.com>
  */
+import {app, h} from 'hyperapp';
+import ProxyServerService from '../proxy/proxy_server_service.js';
 
-import {app} from 'hyperapp';
-import {
-    ProxyServerListState,
-    ProxyServerListActions,
-    ProxyServerListView,
-} from '../proxy/proxy_server_list_view';
+import {ProxyServerListView} from '../proxy/proxy_server_list_view';
+
+const state = {
+  /** @type {ProxyItem[]} */
+  proxies: [],
+  selectedProxy: null,
+};
+
+const actions = {
+  selectProxy: (selectedProxy) => {
+    ProxyServerService.i().setSelected(selectedProxy);
+  },
+  subscribeUpdateLocations: () => async (state, actions) => {
+    ProxyServerService.i().subscribeToLocations(actions.updateLocations);
+  },
+  updateLocations: (locations) =>
+    (state) =>
+      ({proxies: locations, selectedProxy: state.selectedProxy}),
+};
+
+const view = (state) => (
+  <ProxyServerListView proxies={state.proxies} select={actions.selectProxy} />
+);
 
 const hyperapp = app(
-    ProxyServerListState,
-    ProxyServerListActions,
-    ProxyServerListView,
+    state,
+    actions,
+    view,
     document.body
 );
 
-hyperapp.startUpdateLocations();
+hyperapp.subscribeUpdateLocations();

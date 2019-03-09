@@ -48,14 +48,15 @@ export default class ProxyServerService {
      * By default, we are trying to load DEFAULT_PER_PAGE,
      * since we are not expecting to have lots of data here
      *
+     * Must be called ONLY from background page
+     *
      * @param {integer} page current page
      * @param {integer} perPage items per page.
      *                  @default _DEFAULT_PER_PAGE
      * @memberof ProxyServerService
-     * @return {Promise<ProxyItem[]>} promise that will contain
-     * proxy locattions plus pagination data
+     * @return {ProxyItem[]} proxy locattions plus pagination data
      */
-    async getLocations(page = 1,
+    async fetchLocations(page = 1,
         perPage = ProxyServerService._DEFAULT_PER_PAGE) {
       /** @type {Response} */
       let response;
@@ -69,7 +70,7 @@ export default class ProxyServerService {
         console.warn('Failed to fetch proxies. Falling back to cache');
         response = this._getCachedLocations();
       }
-      if (!response.cache && response.ok) {
+      if (response.ok) {
         const results = await response.json();
         const data = results.results;
         if (!results.cache) {
@@ -84,17 +85,50 @@ export default class ProxyServerService {
     }
 
     /**
+     * @callback locationsCallback
+     * @param {ProxyItem[])} proxies list of updated proxies
+     */
+    /**
+     * Subscribe to location updates
+     * from local storage
+     *
+     * @param {locationsCallback} callback callback that
+     * will be provided with locations
+     * @memberof ProxyServerService
+     */
+    subscribeToLocations(callback) {
+      const listener = function(changes) {
+        for (const key in changes) {
+          if (key === 'proxies') {
+            const storageChange = changes[key];
+
+            callback(storageChange.newValue);
+          }
+        }
+      };
+      if (!browser.storage.onChanged.hasListener(listener)) {
+        browser.storage.onChanged.addListener(listener);
+        // also, lets on the first load populate
+        // proxies from local cache since they are not loaded
+        // yet
+        this._getCachedLocations().then((proxies) => {
+          if (proxies) callback(proxies.results);
+        });
+      }
+    }
+
+    /**
      * Returns cached version of #getLocations
      * formatted as it would be responce from server
      *
-     * @return {Promise<object>} list of cached proxies
+     * @return {object} list of cached proxies
      * @memberof ProxyServerService
      */
-    _getCachedLocations() {
-      const data = LocalStorage.locations();
+    async _getCachedLocations() {
+      const data = await LocalStorage.locations();
       // also using 'cache' variable
       // to indicate we are on cache
-      return {results: data ? data : [], cache: true};
+      return {results: data ? data : []};
     }
 
     /**
