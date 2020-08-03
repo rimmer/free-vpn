@@ -164,7 +164,7 @@ export default class ProxyServerService {
      */
     _getEndpointUrl() {
       if (!this._endpointAddress) {
-        this._endpointAddress = 'http://185.177.4.227:8080';
+        this._endpointAddress = 'https://api.sytra.io/locations';
       }
 
       return this._endpointAddress;
