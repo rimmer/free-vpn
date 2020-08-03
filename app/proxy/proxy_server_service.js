@@ -19,10 +19,9 @@ import LocalStorage from './local_storage_manager.js';
  */
 export default class ProxyServerService {
     /**
-     * @type {integer}
+     * @type {ProxyServerService}
      * @memberof ProxyServerService
      */
-    static _DEFAULT_PER_PAGE = 50;
     static _instance;
 
     _endpointAddress;
@@ -56,28 +55,24 @@ export default class ProxyServerService {
      * @memberof ProxyServerService
      * @return {ProxyItem[]} proxy locattions plus pagination data
      */
-    async fetchLocations(page = 1,
-        perPage = ProxyServerService._DEFAULT_PER_PAGE) {
+    async fetchLocations() {
       /** @type {Response} */
       let response;
       try {
-        response = await fetch(this._getEndpointUrl()
-          + '/api/v1/locations?pages='
-          + page + '&per_page='
-          + perPage);
+        response = await fetch(this._getEndpointUrl() + '/locations');
         if (!response.ok) throw new Error(response.statusText);
       } catch (e) {
         console.warn('Failed to fetch proxies. Falling back to cache');
         response = this._getCachedLocations();
       }
       if (response.ok) {
+        /** @type {Array} */
         const results = await response.json();
-        const data = results.results;
-        if (!results.cache) {
+        if (results.length > 0) { // we assume its never empty
           console.debug('Saving locations to cache');
-          LocalStorage.locations(data);
+          LocalStorage.locations(results);
         }
-        return data;
+        return results;
       } else {
         console.warn('Failed to parse proxies. Falling back to cache');
         return response.results;
@@ -164,7 +159,7 @@ export default class ProxyServerService {
      */
     _getEndpointUrl() {
       if (!this._endpointAddress) {
-        this._endpointAddress = 'https://api.sytra.io/locations';
+        this._endpointAddress = 'https://api.sytra.io';
       }
 
       return this._endpointAddress;

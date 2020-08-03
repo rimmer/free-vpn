@@ -25,7 +25,7 @@
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.14.1",
     "sass-loader": "^9.0.2",
-    "webextension-toolbox": "github:rsoury/webextension-toolbox#7c5792872fde33bc755d10dc1033e3a10cdd6504",
+    "webextension-toolbox": "github:webextension-toolbox/webextension-toolbox#173e9bcc243d29bdf3520c1b74bcf620053fc3a3",
     "webpack": "^4.43.0"
   },
   "dependencies": {
