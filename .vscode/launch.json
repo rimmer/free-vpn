@@ -5,14 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "chrome",
+            "name": "Launch via NPM",
             "request": "launch",
-            "name": "Launch Chrome",
-            "webRoot": "${workspaceFolder}",
-            "runtimeExecutable": "/snap/bin/chromium"
+            "runtimeArgs": [
+                "run",
+                "dev:chrome"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
         },
         {
             "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome",
+            "webRoot": "${workspaceFolder}/dist/chrome"
+        },
+        {
+            "type": "pwa-chrome",
             "request": "attach",
             "name": "Attach to Chrome",
             "port": 9222,

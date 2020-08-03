@@ -13,25 +13,26 @@
     "build:edge": "webextension-toolbox build"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^10.1.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
+    "copy-webpack-plugin": "^6.0.3",
     "css-loader": "^2.1.1",
-    "eslint": "^5.15.1",
+    "eslint": "^5.16.0",
     "eslint-config-google": "^0.12.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-jest": "^22.3.0",
-    "eslint-plugin-react": "^7.12.4",
-    "mini-css-extract-plugin": "^0.5.0",
-    "node-sass": "^4.11.0",
-    "sass-loader": "^7.1.0",
-    "webextension-toolbox": "github:webextension-toolbox/webextension-toolbox#44cbfe76fd8a037f4b26fc3531be3a87bdec0a49",
-    "webpack": "^4.29.6"
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.18.0",
+    "eslint-plugin-react": "^7.20.3",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^9.0.2",
+    "webextension-toolbox": "github:rsoury/webextension-toolbox#7c5792872fde33bc755d10dc1033e3a10cdd6504",
+    "webpack": "^4.43.0"
   },
   "dependencies": {
-    "flag-icon-css": "^3.3.0",
-    "hyperapp": "^1.2.9",
-    "picnic": "^6.5.0",
+    "flag-icon-css": "^3.5.0",
+    "hyperapp": "^1.2.10",
+    "picnic": "^6.5.2",
     "promise-polyfill": "8.1.0",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.2.0"
   }
 }
