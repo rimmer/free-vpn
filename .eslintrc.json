@@ -1,15 +1,17 @@
 {
-    "extends": "google",
+    "extends": ["google", "plugin:jsdoc/recommended"],
     "parser": "babel-eslint",
     "plugins": [
         "import",
         "react",
-        "jest"
+        "jest",
+        "jsdoc"
     ],
     "rules": {
         "linebreak-style": "off",
         "no-unused-vars": [2, { "varsIgnorePattern": "h" }],
-        "react/jsx-uses-vars": 2
+        "react/jsx-uses-vars": 2,
+        "require-jsdoc": "off"
     },
     "parserOptions": {
         "allowImportExportEverywhere": true,
@@ -19,6 +21,8 @@
     },
     "env": {
         "browser": true,
-        "jest": true
+        "jest": true,
+        "webextensions": true,
+        "es6": true
     }
 }

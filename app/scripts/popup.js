@@ -9,9 +9,9 @@
  * @author Mike West <mkwst@google.com>
  */
 import {app, h} from 'hyperapp';
-import ProxyServerService from '../proxy/proxy_server_service.js';
+import ProxyServerService from '../lib/proxy_server_service.js';
 
-import {ProxyServerListView} from '../proxy/proxy_server_list_view';
+import {ProxyServerListView} from '../lib/proxy_server_list_view';
 
 const state = {
   /** @type {ProxyItem[]} */
