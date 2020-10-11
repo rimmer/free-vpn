@@ -11,13 +11,11 @@
  */
 
 import LocalStorage from "./local_storage_manager";
-import { getProxy } from "./proxy_system_settings";
 import ProxyServerService from "./proxy_server_service";
 
 /* globals UserToken */
 export default class PreferencesCache {
   /** @type {UserToken} */ userToken;
-  /** @type {boolean} */ isCustomProxySet = false;
 
   /**
    * Gets instance of StorageCache (singleton)
@@ -37,16 +35,5 @@ export default class PreferencesCache {
       if (token) return token;
       else return ProxyServerService.i().getUserToken();
     }).then(token => this.userToken = token);
-    
-    getProxy().then(settings => this.isCustomProxySet = (
-        (
-          settings.value.mode == 'fixed_servers' || 
-          settings.value.proxyType == 'manual'
-        ) && (
-          settings.levelOfControl == 'controlled_by_this_extension' || 
-          settings.levelOfControl == 'controllable_by_this_extension'
-        )
-      )
-    )
   }
 }

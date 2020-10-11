@@ -1,33 +1,25 @@
 import PreferencesCache from "./preferences_cache";
-import { ACCESS_TOKEN, API_ENDPOINT } from './data/constants';
+
+import { ACCESS_TOKEN } from './data/constants';
 
 /**
- * Sets given proxy as proxy used by the browser
- * @param {ProxyItem} proxy proxy to set as browser proxy
+ * Convets proxy item to an object digestable by ToggleProxy
+ * @param {ProxyItem} proxy to convert into ToggleProxy settings
+ * @returns proxy settings
  */
-export function setProxy(proxy) {
-  PreferencesCache.i.isCustomProxySet = proxy ? true : false;
-
-  if (isChrome()) setProxyChrome(proxy);
-  else setProxyWebextenstion(proxy);
-}
-
-export async function getProxy() {
-  if (isChrome())
-    return new Promise((resolve) => 
-      chrome.proxy.settings.get({}, (data) => resolve(data))
-    );
-  else return browser.proxy.settings.get();
-}
-
-/**
- * Returns if we are running at Chrome.
- *
- * @returns {boolean} if running on Chrome
- */
-export function isChrome() {
-  return !!window.chrome
-    && (!!window.chrome.webstore || !!window.chrome.runtime);
+export function proxyItemToProxySettings(proxy) {
+  return {
+    http: {
+      active: true,
+      host: proxy.ip,
+      port: proxy.port
+    },
+    ssl: {
+      active: true,
+      host: proxy.ip,
+      port: proxy.port
+    },
+  }
 }
 
 export function startHeaderInterception() {
@@ -63,57 +55,4 @@ function _headersInterceptor(details) {
       password: ACCESS_TOKEN
     }
   };  
-}
-
-/**
- * Compat function for Chrome browser
- *
- * @param {ProxyItem} proxy proxy to set as chromium proxy
- */
-function setProxyChrome(proxy) {
-  const proxySettings = proxy ? {
-    mode: 'fixed_servers',
-    rules: {
-      singleProxy: {
-        host: proxy.ip,
-        port: proxy.port,
-      },
-      bypassList: [
-        API_ENDPOINT.host,
-        '<local>'
-      ]
-    },
-  } : {
-      mode: 'system',
-    };
-  console.debug('setting chrome proxy');
-  browser.proxy.settings.set(
-    {
-      value: proxySettings,
-      scope: 'regular',
-    }
-  );
-}
-
-/**
- * Compat function for browsers compatible with
- * webextension standarts
- *
- * @param {any} proxy
- * @returns {Promise<any>} result of setting
- * new proxy settings
- */
-function setProxyWebextenstion(proxy) {
-  const proxySettings = proxy ? {
-    proxyType: 'manual',
-    http: `http://${proxy.ip}:${proxy.port}`,
-    httpProxyAll: true,
-    passthrough: [
-      API_ENDPOINT.host,
-      'localhost',
-      '127.0.0.1'
-    ]
-  } : { proxyType: 'system' };
-  console.debug('setting webextension proxy');
-  return browser.proxy.settings.set({ value: proxySettings });
 }
