@@ -39,10 +39,14 @@ toggleProxy.testSettingControl();
 document.addEventListener('DOMContentLoaded', function() {
   browser.runtime.onMessage.addListener((request) => {
     if (request.selectProxy) {
-      const proxySettings = proxyItemToProxySettings(request.selectedProxy);
-      // this also might trigger toggleProxy.onStatus
-      toggleProxy.setProxySettings(proxySettings);
-      request.selectedProxy ? toggleProxy.enable() : toggleProxy.disable();
+      if (request.selectedProxy) {
+        const proxySettings = proxyItemToProxySettings(request.selectedProxy);
+        // this also might trigger toggleProxy.onStatus
+        toggleProxy.setProxySettings(proxySettings);
+        toggleProxy.enable();
+      } else {
+        toggleProxy.disable();
+      }
     }
   });
 

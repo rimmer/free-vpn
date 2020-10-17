@@ -14,13 +14,15 @@ export function proxyItemToProxySettings(proxy) {
       active: true,
       host: proxy.ip,
       port: proxy.port,
+      protocol: 'http',
     },
     ssl: {
       active: true,
       host: proxy.ip,
       port: proxy.port,
+      protocol: 'https',
     },
-  }
+  };
 }
 
 export function startHeaderInterception() {
@@ -38,8 +40,8 @@ export function stopHeaderInterception() {
 /**
  * onAuthRequired callback
  *
- * @param {browser.webRequest._OnBeforeSendHeadersDetails} details of the request
- * @returns {browser.webRequest.BlockingResponse} 
+ * @param {browser.webRequest._OnBeforeSendHeadersDetails} details of request
+ * @returns {browser.webRequest.BlockingResponse}
  * returns proxy auth credentials
  */
 function _headersInterceptor(details) {
