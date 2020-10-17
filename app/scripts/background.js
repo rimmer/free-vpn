@@ -9,22 +9,38 @@
  * @author Mike West <mkwst@google.com>
  */
 
-import {setProxy} from '../proxy/proxy_system_settings';
-import ProxyServerService from '../proxy/proxy_server_service.js';
+import {proxyItemToProxySettings, startHeaderInterception, stopHeaderInterception} from '../lib/proxy_system_settings';
+import ProxyServerService from '../lib/proxy_server_service.js';
+import PreferencesCache from "../lib/preferences_cache";
+import ToggleProxy from "../lib/ToggleProxy";
+
+const toggleProxy = new ToggleProxy();
+
+PreferencesCache.i.preload();
 
 browser.runtime.onInstalled.addListener((details) => {
   console.log('previousVersion', details.previousVersion);
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-  // If this extension has already set the proxy settings, then reset it
-  // once as the background page initializes.  This is essential, as
-  // incognito settings are wiped on restart.
+// proxy controllable insight listener
+toggleProxy.onStatus((isProxyOn) => {
+  if (isProxyOn) {
+    startHeaderInterception();
+  } else {
+    stopHeaderInterception();
+  }
+});
 
+// test proxy controllable
+toggleProxy.testSettingControl();
+
+document.addEventListener('DOMContentLoaded', function() {
   browser.runtime.onMessage.addListener((request) => {
     if (request.selectProxy) {
-      const proxy = request.selectedProxy;
-      setProxy(proxy);
+      const proxySettings = proxyItemToProxySettings(request.selectedProxy);
+      // this also might trigger toggleProxy.onStatus
+      toggleProxy.setProxySettings(proxySettings);
+      request.selectedProxy ? toggleProxy.enable() : toggleProxy.disable();
     }
   });
 

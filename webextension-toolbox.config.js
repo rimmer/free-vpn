@@ -43,17 +43,7 @@ module.exports = {
                 }]
             }),
         );
-        config.module.rules.push({
-            test: /\.(sa|sc|c)ss$/,
-            exclude: /node_modules/,
-            use: [
-                // fallback to style-loader in development
-                MiniCssExtractPlugin.loader,
-                require.resolve('sass-loader'), // compiles Sass to CSS
-                require.resolve('css-loader'),
-            ],
-        });
-        config.devtool = 'inline-module-source-map';
+        config.devtool = 'inline-source-map';
         return config;
     },
 };

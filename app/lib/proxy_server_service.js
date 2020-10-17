@@ -1,20 +1,22 @@
 /**
- * @fileoverview Here we implement ProxyServerListView, that renders
+ * @file Here we implement ProxyServerListView, that renders
  * proxy server list.
  *
  * We user {@link ProxyServerService}, as data provider
  *
  * @author Igor Yanishevskiy <igor@braindrain.pro>
  */
+/* globals ProxyItem */
+/* globals UserToken */
 import 'whatwg-fetch';
-import './data/proxy_item.js';
 import LocalStorage from './local_storage_manager.js';
+import { APP_UUID, API_ENDPOINT } from './data/constants';
 
-/**
+/**I
  * This is a data provider for the proxy
  * server-side API
  *
- * @export
+ * @exports
  * @class ProxyServerService
  */
 export default class ProxyServerService {
@@ -28,8 +30,9 @@ export default class ProxyServerService {
 
     /**
      * Gets instance of ProxyServerService (singleton)
+     *
      * @memberof ProxyServerService
-     * @return {ProxyServerService} instance of service
+     * @returns {ProxyServerService} instance of service
      */
     static i() {
       if (!this._instance) {
@@ -49,17 +52,14 @@ export default class ProxyServerService {
      *
      * Must be called ONLY from background page
      *
-     * @param {integer} page current page
-     * @param {integer} perPage items per page.
-     *                  @default _DEFAULT_PER_PAGE
      * @memberof ProxyServerService
-     * @return {ProxyItem[]} proxy locattions plus pagination data
+     * @returns {ProxyItem[]} proxy locations
      */
     async fetchLocations() {
       /** @type {Response} */
       let response;
       try {
-        response = await fetch(this._getEndpointUrl() + '/locations');
+        response = await fetch(this._getEndpointUrl() + 'locations');
         if (!response.ok) throw new Error(response.statusText);
       } catch (e) {
         console.warn('Failed to fetch proxies. Falling back to cache');
@@ -81,7 +81,7 @@ export default class ProxyServerService {
 
     /**
      * @callback locationsCallback
-     * @param {ProxyItem[])} proxies list of updated proxies
+     * @param {ProxyItem[]} proxies list of updated proxies
      */
     /**
      * Subscribe to location updates
@@ -116,7 +116,7 @@ export default class ProxyServerService {
      * Returns cached version of #getLocations
      * formatted as it would be responce from server
      *
-     * @return {object} list of cached proxies
+     * @returns {object} list of cached proxies
      * @memberof ProxyServerService
      */
     async _getCachedLocations() {
@@ -127,10 +127,9 @@ export default class ProxyServerService {
     }
 
     /**
-     *
      * Sets currently user selected proxy
      *
-     * @param {ProxyItem} proxy
+     * @param {ProxyItem} proxy object to remember the selection
      * @memberof ProxyServerService
      */
     setSelected(proxy) {
@@ -144,22 +143,76 @@ export default class ProxyServerService {
 
     /**
      * Gets currently user selected proxy
+     *
      * @memberof ProxyServerService
+     * @returns {Promise<any>} with selected location
      */
     async getSelected() {
       return LocalStorage.selectedLocation();
     }
 
     /**
+     * Gets user token from the storage
+     * If token has expired, fetch the new one from
+     * remote server
+     *
+     * @returns {Promise<UserToken>} object with a token
+     */
+    async getUserToken() {
+      let token = await LocalStorage.userToken();
+      console.debug("User token from local storage", token);
+      if (!this._isUserTokenValid(token)) {
+        console.debug("User token invalid, getting new");
+        token = await this._fetchUserToken();
+        console.debug("Recieved new token", token);
+        LocalStorage.userToken(token);
+      }
+
+      return Promise.resolve(token);
+    }
+
+    /**
+     * @returns {UserToken} user token from network
+     */
+    async _fetchUserToken() {
+      const url = this._getEndpointUrl() + 'tokens';
+
+      /** @type {Request} */const request = {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          app_uuid: APP_UUID,
+          user_email: 'huyak@mail.ru'
+        })
+      }
+      return (await fetch(url, request)).json();
+    }
+
+    /**
+     * Whether user token is valid
+     *
+     * @param {UserToken} userToken user token
+     * @returns {boolean} whether user token is valid
+     */
+    _isUserTokenValid(userToken) {
+      if (!userToken || !userToken.valid) return false;
+      const expire = new Date(userToken.expire_at);
+      return expire.getTime() > new Date().getTime();
+    }
+
+    /**
      * Get server endpoint from
      * enviroment variables (using .dontenv on dev)
      *
-     * @return {string} endpoint address url
+     * @returns {string} endpoint address url
      * @memberof ProxyServerService
      */
     _getEndpointUrl() {
       if (!this._endpointAddress) {
-        this._endpointAddress = 'https://api.sytra.io';
+        this._endpointAddress = API_ENDPOINT.toString();
       }
 
       return this._endpointAddress;

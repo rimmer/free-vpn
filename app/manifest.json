@@ -24,8 +24,10 @@
   },
 
   "permissions": [
-    "https://api.sytra.io/",
+    "<all_urls>",
     "proxy",
-    "storage"
+    "storage",
+    "webRequest",
+    "webRequestBlocking"
   ]
 }
