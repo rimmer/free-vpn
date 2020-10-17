@@ -3,7 +3,8 @@ const browser = chrome || browser;
 class ToggleProxy {
   constructor() {
     this.proxySettings = null;
-    this.isChrome = typeof InstallTrigger === 'undefined'; // InstallTrigger is defined only on Firefox
+    // InstallTrigger is defined only on Firefox
+    this.isChrome = typeof InstallTrigger === 'undefined';
     this._isProxyOn = false;
     this._isControllableObj = null;
 
@@ -60,30 +61,30 @@ class ToggleProxy {
     if (this.isChrome) {
       // Chrome
       proxyConfig = {
-        mode: "fixed_servers",
+        mode: 'fixed_servers',
         rules: {
-          bypassList: ["<local>"]
+          bypassList: ['<local>'],
         },
       };
 
       if (this.proxySettings.http.active) {
         proxyConfig.rules['proxyForHttp'] = {
           host: this.proxySettings.http.host,
-          port: parseInt(this.proxySettings.http.port)
+          port: parseInt(this.proxySettings.http.port),
         };
       }
 
       if (this.proxySettings.ssl.active) {
         proxyConfig.rules['proxyForHttps'] = {
           host: this.proxySettings.ssl.host,
-          port: parseInt(this.proxySettings.ssl.port)
-        }
+          port: parseInt(this.proxySettings.ssl.port),
+        };
       }
     } else {
       // assume FireFox
       proxyConfig = {
-        proxyType: "manual"
-      }
+        proxyType: 'manual',
+      };
 
       if (this.proxySettings.http.active) {
         // client settings indicate HTTP proxy
@@ -103,10 +104,10 @@ class ToggleProxy {
     if (this.isProxyOn) {
       // Proxy is on. Clear settings and return
       browser.proxy.settings.clear(
-        {},
-        function () {
-          this.isProxyOn = false;
-        }.bind(this)
+          {},
+          function() {
+            this.isProxyOn = false;
+          }.bind(this)
       );
 
       return;
@@ -122,14 +123,15 @@ class ToggleProxy {
         // Chrome
         // use callback | no private browsing exception like Firefox
         browser.proxy.settings.set(
-          { value: proxyConfig, scope: 'regular' }, // 'scope' property is Chrome required only
-          function () {
-            this.isProxyOn = true;
-          }.bind(this)
+            // 'scope' property is Chrome required only
+            {value: proxyConfig, scope: 'regular'},
+            function() {
+              this.isProxyOn = true;
+            }.bind(this)
         );
       } else {
         // Firefox
-        await browser.proxy.settings.set({ value: proxyConfig });
+        await browser.proxy.settings.set({value: proxyConfig});
 
         this.isProxyOn = true;
       }
@@ -145,34 +147,57 @@ class ToggleProxy {
   parseProxyControl(result) {
     switch (result.levelOfControl) {
       case 'not_controllable':
-        return { allowed: false, levelOfControl: result.levelOfControl, reason: 'Cannot control proxy settings' }
+        return {
+          allowed: false,
+          levelOfControl: result.levelOfControl,
+          reason: 'Cannot control proxy settings',
+        };
 
       case 'controlled_by_other_extensions':
-        return { allowed: false, levelOfControl: result.levelOfControl, reason: 'Proxy controlled by another extension' }
+        return {
+          allowed: false,
+          levelOfControl: result.levelOfControl,
+          reason: 'Proxy controlled by another extension',
+        };
 
       case 'controllable_by_this_extension':
-        return { allowed: true, levelOfControl: result.levelOfControl, reason: 'Extension can change proxy' }
+        return {
+          allowed: true,
+          levelOfControl: result.levelOfControl,
+          reason: 'Extension can change proxy',
+        };
 
       case 'controlled_by_this_extension':
-        return { allowed: true, levelOfControl: result.levelOfControl, reason: 'Proxy already controlled by this extension' }
+        return {
+          allowed: true,
+          levelOfControl: result.levelOfControl,
+          reason: 'Proxy already controlled by this extension',
+        };
 
       default:
         // just assume it is allowed
-        return { allowed: true, levelOfControl: 'Unknown', reason: 'Unknown control access (Error)' }
+        return {
+          allowed: true,
+          levelOfControl: 'Unknown',
+          reason: 'Unknown control access (Error)',
+        };
     }
   }
 
   testSettingControl() {
     try {
-      browser.proxy.settings.get({}, function (result) {
+      browser.proxy.settings.get({}, function(result) {
         this.isControllableObj = this.parseProxyControl(result);
       }.bind(this));
     } catch (e) {
       console.error(`Unable to check proxy control: ${e}`);
-      this.isControllableObj = { allowed: false, levelOfControl: 'failed check', reason: 'failed check' }
+      this.isControllableObj = {
+        allowed: false,
+        levelOfControl: 'failed check',
+        reason: 'failed check',
+      };
     }
-
   }
 }
 
-export { ToggleProxy as default }
+export {ToggleProxy as default};

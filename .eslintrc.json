@@ -11,7 +11,10 @@
         "linebreak-style": "off",
         "no-unused-vars": [2, { "varsIgnorePattern": "h" }],
         "react/jsx-uses-vars": 2,
-        "require-jsdoc": "off"
+        "require-jsdoc": "off",
+        "valid-jsdoc": [2, {
+            "prefer": { "return": "returns" }
+        }]
     },
     "parserOptions": {
         "allowImportExportEverywhere": true,

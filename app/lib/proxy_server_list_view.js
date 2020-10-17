@@ -1,5 +1,5 @@
 /**
- * @fileoverview Here we implement ProxyServerListView, that renders
+ * @file Here we implement ProxyServerListView, that renders
  * proxy server list.
  *
  * We user {@link ProxyServerService}, as data provider
@@ -14,9 +14,9 @@ import {h} from 'hyperapp';
  * Renders list of proxy servers,
  * that the user is eligible to select.
  *
- * @param {ProxyServerListState} state
- * @param {ProxyServerListActions} actions
- * @return {Object} object with hyperapp virtual DOM
+ * @param {any} proxies list of proxies to display
+ * @param {any} select callback to call when proxy is selected
+ * @returns {object} object with hyperapp virtual DOM
  */
 export const ProxyServerListView = ({proxies, select}) => (
   <ul class="list proxies">

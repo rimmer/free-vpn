@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 /**
- * @fileoverview This file initializes the extension's popup by creating a
+ * @file This file initializes the extension's popup by creating a
  * ProxyFormController object.
  *
  * @author Mike West <mkwst@google.com>

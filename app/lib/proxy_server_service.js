@@ -10,9 +10,9 @@
 /* globals UserToken */
 import 'whatwg-fetch';
 import LocalStorage from './local_storage_manager.js';
-import { APP_UUID, API_ENDPOINT } from './data/constants';
+import {APP_UUID, API_ENDPOINT} from './data/constants';
 
-/**I
+/**
  * This is a data provider for the proxy
  * server-side API
  *
@@ -90,6 +90,7 @@ export default class ProxyServerService {
      * @param {locationsCallback} callback callback that
      * will be provided with locations
      * @memberof ProxyServerService
+     * @returns {void}
      */
     subscribeToLocations(callback) {
       const listener = function(changes) {
@@ -131,6 +132,7 @@ export default class ProxyServerService {
      *
      * @param {ProxyItem} proxy object to remember the selection
      * @memberof ProxyServerService
+     * @returns {void}
      */
     setSelected(proxy) {
       LocalStorage.selectedLocation(proxy);
@@ -160,11 +162,11 @@ export default class ProxyServerService {
      */
     async getUserToken() {
       let token = await LocalStorage.userToken();
-      console.debug("User token from local storage", token);
+      console.debug('User token from local storage', token);
       if (!this._isUserTokenValid(token)) {
-        console.debug("User token invalid, getting new");
+        console.debug('User token invalid, getting new');
         token = await this._fetchUserToken();
-        console.debug("Recieved new token", token);
+        console.debug('Recieved new token', token);
         LocalStorage.userToken(token);
       }
 
@@ -178,16 +180,16 @@ export default class ProxyServerService {
       const url = this._getEndpointUrl() + 'tokens';
 
       /** @type {Request} */const request = {
-        method: "POST",
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
           app_uuid: APP_UUID,
-          user_email: 'huyak@mail.ru'
-        })
-      }
+          user_email: 'huyak@mail.ru',
+        }),
+      };
       return (await fetch(url, request)).json();
     }
 

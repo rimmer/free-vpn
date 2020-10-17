@@ -1,17 +1,17 @@
 /**
  * @file Manager that caches settings from
- * local storage to prefetch data into memory 
+ * local storage to prefetch data into memory
  * and avoid using Promises
- * 
- * This mostly needed as a hack for returning 
- * user token immidiately for 
+ *
+ * This mostly needed as a hack for returning
+ * user token immidiately for
  * {browser.webRequest.onBeforeSendHeaders} callback
  *
  * @author Igor Yanishevskiy <igor@braindrain.pro>
  */
 
-import LocalStorage from "./local_storage_manager";
-import ProxyServerService from "./proxy_server_service";
+import LocalStorage from './local_storage_manager';
+import ProxyServerService from './proxy_server_service';
 
 /* globals UserToken */
 export default class PreferencesCache {
@@ -31,9 +31,9 @@ export default class PreferencesCache {
   }
 
   preload() {
-    LocalStorage.userToken().then(token => {
+    LocalStorage.userToken().then((token) => {
       if (token) return token;
       else return ProxyServerService.i().getUserToken();
-    }).then(token => this.userToken = token);
+    }).then((token) => this.userToken = token);
   }
 }

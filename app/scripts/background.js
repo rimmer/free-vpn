@@ -3,16 +3,18 @@
 // found in the LICENSE file.
 
 /**
- * @fileoverview This file initializes the background page by loading a
+ * @file This file initializes the background page by loading a
  * ProxyErrorHandler, and resetting proxy settings if required.
  *
  * @author Mike West <mkwst@google.com>
  */
 
-import {proxyItemToProxySettings, startHeaderInterception, stopHeaderInterception} from '../lib/proxy_system_settings';
+import {proxyItemToProxySettings,
+  startHeaderInterception,
+  stopHeaderInterception} from '../lib/proxy_system_settings';
 import ProxyServerService from '../lib/proxy_server_service.js';
-import PreferencesCache from "../lib/preferences_cache";
-import ToggleProxy from "../lib/ToggleProxy";
+import PreferencesCache from '../lib/preferences_cache';
+import ToggleProxy from '../lib/ToggleProxy';
 
 const toggleProxy = new ToggleProxy();
 
